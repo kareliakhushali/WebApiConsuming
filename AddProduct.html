@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <title>Add Product</title>
+</head>
+<body>
+    <div class="container">
+        <form>
+            <div class="m-4">
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="Name">
+
+                </div>
+                <div class="mb-3">
+                    <label for="qty" class="form-label">Qty</label>
+                    <input type="number" class="form-control" id="qty">
+                </div>
+                <div class="mb-3">
+                    <label for="rate" class="form-label">Rate</label>
+                    <input type="number" class="form-control" id="rate">
+                </div>
+                <div class="mb-3 form-check">
+                   
+                    <input type="checkbox" class="form-check-input" id="isactive" checked>
+                    <label class="form-check-label" for="isactive">Active?</label>
+                    
+                </div>
+                <button type="button" class="btn btn-primary" id="btnSave">Save</button>&nbsp;
+                <button type="reset" class="btn btn-secondary">Reset</button>
+            </div>
+        </form>
+    </div>
+    <script src="/jquery/jquery.js"></script>
+    <script src="/bootstrap/js/bootstrap.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#btnSave").on("click",function(event){
+            event.preventDefault();
+            var product = new Object();
+            product.id = 0;
+            product.name = $("#Name").val().trim();
+            product.qty = $("#qty").val();
+            product.rate = $("#rate").val();
+            product.catId = 1;
+            product.isActive = $("#isactive").is(":checked");
+            product.profile = "default.jpg";
+            $.ajax(
+                "http://localhost:4758/api/Product/",
+            {
+                contentType:"application/json;charset=utf-8",
+                type:"POST",
+                data:JSON.stringify(product),
+                dataType:"json",
+                success:function(response){
+                    if(response){
+                        window.location.href = "/GetProducts.html";
+                    }
+                    else{
+                        alert("Duplicate value not allowed");
+                        console.log(JSON.stringify(response));
+                    }
+                },
+                error:function(response){
+                    let result = JSON.stringify(response);
+                    console.log(result);
+                    alert(result);
+                }
+            })
+
+
+        })
+       
+    })
+</script>
+</body>
+</html>
